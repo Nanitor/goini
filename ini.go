@@ -51,12 +51,12 @@ func LoadReader(reader *bufio.Reader) (dict Dict, err error) {
 			break
 		}
 		lineno++
-		
+
 		line := strings.TrimFunc(string(l), unicode.IsSpace)
 		if len(line) == 0 {
 			continue
 		}
-		
+
 		for line[len(line)-1] == '\\' {
 			line = line[:len(line)-1]
 			l, _, err := reader.ReadLine()
@@ -151,6 +151,15 @@ func (dict Dict) GetBool(section, key string) (bool, bool) {
 	return false, false
 }
 
+func (dict Dict) GetBoolDef(section, key string, defVal bool) bool {
+	val, success := dict.GetBool(section, key)
+	if !success {
+		return defVal
+	}
+
+	return val
+}
+
 func (dict Dict) SetBool(section, key string, value bool) {
 	dict.SetString(section, key, strconv.FormatBool(value))
 }
@@ -165,6 +174,15 @@ func (dict Dict) GetString(section, key string) (string, bool) {
 		return "", false
 	}
 	return value, true
+}
+
+func (dict Dict) GetStringDef(section, key string, defVal string) string {
+	val, success := dict.GetString(section, key)
+	if !success {
+		return defVal
+	}
+
+	return val
 }
 
 func (dict Dict) SetString(section, key, value string) {
@@ -191,6 +209,15 @@ func (dict Dict) GetInt(section, key string) (int, bool) {
 	return i, true
 }
 
+func (dict Dict) GetIntDef(section, key string, defVal int) int {
+	val, success := dict.GetInt(section, key)
+	if !success {
+		return defVal
+	}
+
+	return val
+}
+
 func (dict Dict) SetInt(section, key string, value int) {
 	dict.SetString(section, key, strconv.FormatInt(int64(value), 10))
 }
@@ -209,6 +236,15 @@ func (dict Dict) GetDouble(section, key string) (float64, bool) {
 		return 0, false
 	}
 	return d, true
+}
+
+func (dict Dict) GetDoubleDef(section, key string, defVal float64) float64 {
+	val, success := dict.GetDouble(section, key)
+	if !success {
+		return defVal
+	}
+
+	return val
 }
 
 func (dict Dict) SetDouble(section, key string, value float64) {
